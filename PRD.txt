@@ -1,0 +1,160 @@
+Product Requirements Document: GlamourRent (Party Dress Rental)
+Product Overview
+Product Vision: To provide a seamless online discovery and booking platform for local party dress rentals, bridging the gap between digital browsing and secure, in-person try-ons and transactions.
+Target Users: * Primary: Local women (ages 16-45) attending formal events, weddings, or parties who want affordable luxury without purchasing.
+
+Secondary: Boutique Admins/Owners managing inventory, schedules, and security.
+Business Objectives: Digitize inventory browsing to increase lead generation, eliminate double-booking errors, streamline in-person conversions, and secure business assets against theft or damage.
+Success Metrics: Number of inspection appointments booked online, conversion rate from inspection to confirmed rental, zero double-booking incidents, and 100% compliance on deposit/ID collection.
+
+User Personas
+Persona 1: Sarah (The Renter)
+
+Demographics: 24, Marketing Coordinator, highly proficient with mobile apps.
+
+Goals: Find a stunning dress for a gala next weekend, ensure it fits perfectly, and avoid buying a dress she will only wear once.
+
+Pain Points: Wasting time driving to stores only to find her size is already rented out for her dates.
+
+User Journey: Browses inventory on mobile -> Checks availability for gala date -> Books a fitting appointment -> Tries dress on in-store -> Confirms rental.
+
+Persona 2: Lisa (The Admin/Owner)
+
+Demographics: 38, Boutique Owner, moderate technical proficiency.
+
+Goals: Maximize dress utilization, ensure dresses are returned on time, and protect inventory from damage.
+
+Pain Points: Managing rentals via paper calendars or messy spreadsheets, losing money when renters damage items and ghost her.
+
+User Journey: Reviews incoming inspection requests -> Facilitates in-person try-on -> Logs offline payment/deposit -> Captures Renter ID/Photo -> Tracks rental return date via dashboard.
+
+Feature Requirements
+Feature	Description	User Stories	Priority	Acceptance Criteria	Dependencies
+Browse Catalog	Grid view of dresses with filters (Size, Color, Style).	As a user, I want to filter dresses so I can find one that fits me and matches my event.	Must	Filters apply instantly; images are high-res.	Dress inventory database
+Availability Calendar	Calendar UI on the dress detail page showing blocked/open dates.	As a user, I want to see if a dress is available for my event dates before I fall in love with it.	Must	Dates must accurately reflect admin dashboard data.	Availability API
+Inspection Booking	Form to reserve a specific date/time to try on the dress in person.	As a user, I want to book a try-on appointment so the dress is held for me to inspect.	Must	Sends email confirmation to user and admin; blocks calendar for that specific time.	Availability Calendar
+Admin Rental Confirmation	Admin panel toggle to convert an "Inspection" to an "Active Rental."	As an admin, I need to confirm a rental after the user agrees to take the dress.	Must	Updates inventory status to "Rented" for the specified days.	Inspection Booking
+Security Vault	Secure upload field for admin to attach a photo of the renter's physical ID, face, and log the deposit.	As an admin, I want to store the renter's ID and deposit amount so I have collateral for damages.	Must	Files must be encrypted; only accessible by Admin.	Admin Authentication
+Return Tracker	Dashboard view showing upcoming returns, late returns, and dress condition notes.	As an admin, I want to see what dresses are due back today so I can follow up with renters.	Must	Visual flags (red for late, green for on-time).	Rental Confirmation
+User Flows
+Flow 1: Renter Inspection Booking
+
+User lands on homepage and browses the dress catalog.
+
+User clicks a dress, views details, and selects their desired rental dates on the availability calendar.
+
+User clicks "Book Inspection."
+
+User fills out basic contact info (Name, Phone, Email) and selects an inspection time.
+
+Alternative path: Desired inspection time is booked; system suggests next available slot.
+
+Error state: User selects rental dates that overlap with an existing booking; system prompts to pick new dates.
+
+User receives a booking confirmation email with store location and policies.
+
+Flow 2: Admin Confirmation & Security Flow
+
+User arrives at the store for their inspection.
+
+User decides to rent the dress. Admin logs into the Dashboard and opens the user's "Inspection" ticket.
+
+Admin clicks "Confirm Rental."
+
+Admin manually collects the rental fee and security deposit via cash/local card terminal.
+
+Admin uses the system to snap/upload a picture of the user, their Government ID, and inputs the deposit amount collected.
+
+Admin sets the strict "Return Date."
+
+Error state: Admin forgets to upload ID; system prevents rental confirmation until security requirements are met.
+
+System shifts the dress status to "Rented."
+
+Non-Functional Requirements
+Performance
+
+Load Time: < 2 seconds for catalog browsing (image optimization is critical).
+
+Concurrent Users: Up to 500 local users browsing simultaneously.
+
+Response Time: < 1 second for availability calendar checks.
+
+Security
+
+Authentication: Password/OTP for Admin dashboard access. No account creation required for users just browsing (reduces friction).
+
+Authorization: Only Admins can view uploaded IDs, pictures, and financial logs.
+
+Data Protection: Renter IDs and photos must be encrypted at rest and automatically purged 30 days after a successful, damage-free return to comply with privacy best practices.
+
+Compatibility
+
+Devices: Mobile-first design for renters (iOS/Android), Tablet/Desktop optimized for Admin dashboard.
+
+Browsers: Chrome, Safari, Firefox, Edge.
+
+Screen Sizes: Responsive from 320px (mobile) to 1920px (desktop).
+
+Technical Specifications
+Frontend
+
+Technology Stack: React.js or Next.js for fast rendering.
+
+Design System: Tailwind CSS or Material UI.
+
+Responsive Design: Mobile-first approach for public-facing site; dashboard-focused for Admin.
+
+Backend
+
+Technology Stack: Node.js with Express (or Python/Django).
+
+API Requirements: RESTful APIs for inventory fetching, availability checking, and booking creation.
+
+Database: PostgreSQL for relational data (Dresses, Users, Bookings). AWS S3 (or similar) for secure ID/Photo image storage.
+
+Analytics & Monitoring
+Key Metrics: Daily active visitors, inspection booking rate, rental conversion rate, average rental duration.
+
+Events: "Viewed Dress," "Checked Dates," "Booked Inspection."
+
+Dashboards: Admin dashboard showing monthly revenue (manually logged), inventory utilization rate, and outstanding deposits.
+
+Alerting: Email/SMS alert to Admin for new inspection bookings; Email/SMS reminder to User 24 hours before dress return is due.
+
+Release Planning
+MVP (v1.0)
+
+Features: Catalog browsing, availability calendar, inspection booking form, basic admin dashboard to manually log rentals, secure ID/photo upload.
+
+Timeline: 8 weeks.
+
+Success Criteria: 50 inspection bookings generated through the site within the first month.
+
+Future Releases
+
+v1.1: Automated SMS reminders for renters regarding return dates; integrated digital contract signing during the in-person inspection.
+
+v1.2: Online payment gateway integration (Stripe/PayPal) for taking deposits digitally before the user even arrives for inspection (reducing no-shows).
+
+Open Questions & Assumptions
+Question 1: Are there standardized rental windows (e.g., all rentals are 3 days), or is the duration completely custom per user?
+
+Question 2: How are cleaning fees handled? Are they baked into the rental price logged by the admin?
+
+Assumption 1: The business operates from a physical location where inventory is stored and users can try dresses on.
+
+Assumption 2: Local payment methods (cash, local bank transfer, or offline card reader) are preferred over integrated e-commerce payments for the initial rollout.
+
+Appendix
+Competitive Analysis
+
+Competitor 1 (Rent the Runway): Strengths: Massive inventory, seamless logistics. Weaknesses: No local try-ons, shipping delays, impersonal.
+
+Competitor 2 (Local Boutiques): Strengths: In-person fittings. Weaknesses: No digital calendar, requires calling or walking in to check availability.
+
+User Research Findings
+
+Finding 1: Users strongly prefer to try on formal wear before committing to a rental.
+
+Finding 2: Admins cited "ruined dresses with no way to contact the renter" as their highest anxiety point, making the Security Vault feature critical.

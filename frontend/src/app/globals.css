@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+/* ── Design System ─────────────────────────────────────────── */
+:root {
+  --color-brand: #7c3aed;
+  --color-brand-light: #a78bfa;
+  --color-brand-dark: #5b21b6;
+  --color-surface: #faf5ff;
+  --color-surface-card: #ffffff;
+  --color-text-primary: #1e1b4b;
+  --color-text-secondary: #6b7280;
+  --radius: 12px;
+  --shadow-soft: 0 2px 16px rgba(124, 58, 237, 0.08);
+  --shadow-hover: 0 8px 32px rgba(124, 58, 237, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface: #0f0a1e;
+    --color-surface-card: #1a1233;
+    --color-text-primary: #f0e6ff;
+    --color-text-secondary: #a899c7;
+    --shadow-soft: 0 2px 16px rgba(124, 58, 237, 0.12);
+    --shadow-hover: 0 8px 32px rgba(124, 58, 237, 0.24);
+  }
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Glassmorphism Card ─────────────────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass-card {
+    background: rgba(26, 18, 51, 0.72);
+    border-color: rgba(167, 139, 250, 0.12);
+  }
+}
+
+/* ── Button ──────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-brand), var(--color-brand-dark));
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary:hover {
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+  color: var(--color-brand);
+  background: transparent;
+  border: 2px solid var(--color-brand-light);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background: rgba(124, 58, 237, 0.08);
+  border-color: var(--color-brand);
+}
+
+/* ── Input ───────────────────────────────────────────────────── */
+.form-input {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: var(--color-surface-card);
+  color: var(--color-text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+.form-input:focus {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-input {
+    border-color: #374151;
+  }
+}
+
+/* ── Badge ───────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ── Animation ───────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* ── Gradient Text ───────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-brand), #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

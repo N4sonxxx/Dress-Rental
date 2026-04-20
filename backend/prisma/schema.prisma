@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DressStatus {
+  AVAILABLE
+  RENTED
+  MAINTENANCE
+}
+
+enum BookingStatus {
+  PENDING_INSPECTION
+  INSPECTION_CONFIRMED
+  RENTED
+  RETURNED
+  CANCELLED
+}
+
+model Admin {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Dress {
+  id          String      @id @default(uuid())
+  name        String
+  description String
+  size        String
+  color       String
+  style       String
+  pricePerDay Decimal     @db.Decimal(10, 2)
+  imageUrl    String
+  status      DressStatus @default(AVAILABLE)
+  bookings    Booking[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([status])
+  @@index([size, color, style])
+}
+
+model Booking {
+  id             String        @id @default(uuid())
+  dressId        String
+  dress          Dress         @relation(fields: [dressId], references: [id])
+  renterName     String
+  renterEmail    String
+  renterPhone    String
+  startDate      DateTime
+  endDate        DateTime
+  inspectionDate DateTime
+  inspectionTime String
+  status         BookingStatus @default(PENDING_INSPECTION)
+  depositAmount  Decimal?      @db.Decimal(10, 2)
+  securityVault  SecurityVault?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([dressId, startDate, endDate])
+  @@index([status])
+}
+
+model SecurityVault {
+  id            String   @id @default(uuid())
+  bookingId     String   @unique
+  booking       Booking  @relation(fields: [bookingId], references: [id])
+  idPhotoPath   String
+  facePhotoPath String
+  depositAmount Decimal  @db.Decimal(10, 2)
+  createdAt     DateTime @default(now())
+}
