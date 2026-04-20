@@ -83,11 +83,14 @@ app.use((_req, res) => {
 app.use(errorHandler);
 
 // ── Start Server ─────────────────────────────────────────────
-app.listen(PORT, () => {
-  logger.info(`GlamourRent API running on port ${PORT}`, {
-    env: process.env.NODE_ENV || "development",
-    cors: process.env.FRONTEND_URL || "http://localhost:3000",
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    logger.info(`GlamourRent API running on port ${PORT}`, {
+      env: process.env.NODE_ENV || "development",
+      cors: process.env.FRONTEND_URL || "http://localhost:3000",
+    });
   });
-});
+}
 
+// Export the app for Vercel Serverless Function compatibility
 export default app;
