@@ -16,6 +16,9 @@ import adminRoutes from "./routes/admin";
 
 const app = express();
 
+// Trust Vercel proxy for secure cookies
+app.set("trust proxy", 1);
+
 // ── Security Headers (Helmet) ────────────────────────────────
 // Sets 11+ HTTP security headers including CSP, X-Frame-Options,
 // X-Content-Type-Options, Strict-Transport-Security, etc.

@@ -51,13 +51,11 @@ router.post(
         expiresIn: JWT_EXPIRES_IN as any,
       });
 
-      const isVercel = !!process.env.VERCEL;
-
       // Set httpOnly cookie — not accessible via JavaScript (XSS protection)
       res.cookie("token", token, {
         httpOnly: true,
-        secure: isVercel || process.env.NODE_ENV === "production",
-        sameSite: isVercel ? "none" : "lax",
+        secure: true, // Always true since Vercel provides HTTPS and localhost allows secure cookies
+        sameSite: "none", // Always none for cross-site cookie transmission
         maxAge: 8 * 60 * 60 * 1000, // 8 hours
         path: "/",
       });
