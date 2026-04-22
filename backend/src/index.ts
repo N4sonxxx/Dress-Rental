@@ -3,8 +3,6 @@ import helmet from "helmet";
 import cors from "cors";
 import compression from "compression";
 import cookieParser from "cookie-parser";
-import path from "path";
-import fs from "fs";
 
 import { generalLimiter } from "./middleware/rateLimiter";
 import { errorHandler } from "./middleware/errorHandler";
@@ -17,7 +15,6 @@ import availabilityRoutes from "./routes/availability";
 import adminRoutes from "./routes/admin";
 
 const app = express();
-const PORT = parseInt(process.env.PORT || "4000", 10);
 
 // ── Security Headers (Helmet) ────────────────────────────────
 // Sets 11+ HTTP security headers including CSP, X-Frame-Options,
@@ -77,8 +74,11 @@ app.use((_req, res) => {
 // ── Global Error Handler ─────────────────────────────────────
 app.use(errorHandler);
 
-// ── Start Server ─────────────────────────────────────────────
-if (process.env.NODE_ENV !== "production") {
+// ── Start Server (local dev only) ────────────────────────────
+// Vercel automatically sets the VERCEL env var. When running on Vercel
+// we must NOT call app.listen() — the platform handles that itself.
+if (!process.env.VERCEL) {
+  const PORT = parseInt(process.env.PORT || "4000", 10);
   app.listen(PORT, () => {
     logger.info(`GlamourRent API running on port ${PORT}`, {
       env: process.env.NODE_ENV || "development",
