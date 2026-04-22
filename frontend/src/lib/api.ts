@@ -51,13 +51,13 @@ export interface DashboardStats {
 
 // ── Public Endpoints ──────────────────────────────────────────
 export const fetchDresses = async (params?: Record<string, string>) => {
-  const { data } = await api.get<Dress[]>("/dresses", { params });
-  return data;
+  const { data } = await api.get<{ dresses: Dress[] }>("/dresses", { params });
+  return data.dresses;
 };
 
 export const fetchDress = async (id: string) => {
-  const { data } = await api.get<Dress>(`/dresses/${id}`);
-  return data;
+  const { data } = await api.get<{ dress: Dress }>(`/dresses/${id}`);
+  return data.dress;
 };
 
 export const fetchAvailability = async (dressId: string, month: string) => {
@@ -109,43 +109,39 @@ export const fetchDashboard = async () => {
 };
 
 export const fetchAllBookings = async () => {
-  const { data } = await api.get<Booking[]>("/bookings");
-  return data;
+  const { data } = await api.get<{ bookings: Booking[] }>("/bookings");
+  return data.bookings;
 };
 
 export const updateBookingStatus = async (
   id: string,
   status: string
 ) => {
-  const { data } = await api.patch<Booking>(`/bookings/${id}/status`, {
+  const { data } = await api.patch<{ booking: Booking }>(`/bookings/${id}/status`, {
     status,
   });
-  return data;
+  return data.booking;
 };
 
 export const convertToRental = async (
   bookingId: string,
   body: { startDate: string; endDate: string }
 ) => {
-  const { data } = await api.post<Booking>(
+  const { data } = await api.post<{ booking: Booking }>(
     `/bookings/${bookingId}/convert`,
     body
   );
-  return data;
+  return data.booking;
 };
 
-export const createDress = async (formData: FormData) => {
-  const { data } = await api.post<Dress>("/dresses", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return data;
+export const createDress = async (payload: any) => {
+  const { data } = await api.post<{ dress: Dress }>("/dresses", payload);
+  return data.dress;
 };
 
-export const updateDress = async (id: string, formData: FormData) => {
-  const { data } = await api.patch<Dress>(`/dresses/${id}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return data;
+export const updateDress = async (id: string, payload: any) => {
+  const { data } = await api.patch<{ dress: Dress }>(`/dresses/${id}`, payload);
+  return data.dress;
 };
 
 export const uploadSecurityFile = async (
