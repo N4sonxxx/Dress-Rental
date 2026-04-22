@@ -2,8 +2,9 @@ export function cn(...inputs: (string | undefined | null | false)[]) {
   return inputs.filter(Boolean).join(" ");
 }
 
-export function formatPrice(cents: number): string {
-  return `$${cents.toFixed(2)}`;
+export function formatPrice(amount: number | string): string {
+  const num = typeof amount === "string" ? parseFloat(amount) : amount;
+  return `$${(num || 0).toFixed(2)}`;
 }
 
 export function formatDate(dateStr: string): string {
