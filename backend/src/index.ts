@@ -55,13 +55,8 @@ app.use(cookieParser());
 // ── Rate Limiting (global) ───────────────────────────────────
 app.use(generalLimiter);
 
-// ── Static Files (uploaded images) ───────────────────────────
-const uploadDir = process.env.UPLOAD_DIR || "./uploads";
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-app.use("/uploads", express.static(path.resolve(uploadDir)));
-
+// Since we use Supabase for file storage, local disk uploads are disabled.
+// Vercel serverless functions have a read-only filesystem, so creating ./uploads would crash the app.
 // ── Health Check ─────────────────────────────────────────────
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
