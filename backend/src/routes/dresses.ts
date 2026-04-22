@@ -46,11 +46,11 @@ router.get(
   async (req: Request, res: Response): Promise<void> => {
     try {
       const dress = await prisma.dress.findUnique({
-        where: { id: req.params.id },
+        where: { id: String(req.params.id) },
         include: {
           bookings: {
             where: {
-              status: { in: ["PENDING_INSPECTION", "INSPECTION_CONFIRMED", "RENTED"] },
+              status: { in: ["PENDING", "CONFIRMED", "ACTIVE"] },
             },
             select: { startDate: true, endDate: true, status: true },
           },
@@ -99,7 +99,7 @@ router.patch(
   async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       const dress = await prisma.dress.update({
-        where: { id: req.params.id },
+        where: { id: String(req.params.id) },
         data: req.body,
       });
       res.json({ dress });
@@ -119,7 +119,7 @@ router.delete(
   validate(dressIdParamSchema, "params"),
   async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      await prisma.dress.delete({ where: { id: req.params.id } });
+      await prisma.dress.delete({ where: { id: String(req.params.id) } });
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ error: "Failed to delete dress" });

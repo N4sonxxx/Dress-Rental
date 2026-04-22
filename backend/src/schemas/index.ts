@@ -25,35 +25,29 @@ export const dressIdParamSchema = z.object({
 export const createBookingSchema = z
   .object({
     dressId: z.string().uuid("Invalid dress ID"),
-    renterName: z.string().min(2).max(200).trim(),
-    renterEmail: z.string().email("Invalid email").max(254).trim().toLowerCase(),
-    renterPhone: z
+    customerName: z.string().min(2).max(200).trim(),
+    customerEmail: z.string().email("Invalid email").max(254).trim().toLowerCase(),
+    customerPhone: z
       .string()
       .min(8)
       .max(20)
       .regex(/^[+\d\s()-]+$/, "Invalid phone number format"),
-    startDate: z.string().datetime(),
-    endDate: z.string().datetime(),
-    inspectionDate: z.string().datetime(),
-    inspectionTime: z
-      .string()
-      .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Use HH:MM format"),
+    startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format"),
+    endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format"),
+    type: z.enum(["INSPECTION", "RENTAL"]),
+    notes: z.string().max(1000).optional(),
   })
   .refine(
-    (data) => new Date(data.endDate) > new Date(data.startDate),
-    { message: "End date must be after start date", path: ["endDate"] }
-  )
-  .refine(
-    (data) => new Date(data.startDate) > new Date(),
-    { message: "Start date must be in the future", path: ["startDate"] }
+    (data) => new Date(data.endDate) >= new Date(data.startDate),
+    { message: "End date must be on or after start date", path: ["endDate"] }
   );
 
 export const updateBookingStatusSchema = z.object({
   status: z.enum([
-    "PENDING_INSPECTION",
-    "INSPECTION_CONFIRMED",
-    "RENTED",
-    "RETURNED",
+    "PENDING",
+    "CONFIRMED",
+    "ACTIVE",
+    "COMPLETED",
     "CANCELLED",
   ]),
   depositAmount: z.number().positive().max(50000).optional(),

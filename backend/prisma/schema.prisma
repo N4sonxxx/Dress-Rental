@@ -13,11 +13,16 @@ enum DressStatus {
   MAINTENANCE
 }
 
+enum BookingType {
+  INSPECTION
+  RENTAL
+}
+
 enum BookingStatus {
-  PENDING_INSPECTION
-  INSPECTION_CONFIRMED
-  RENTED
-  RETURNED
+  PENDING
+  CONFIRMED
+  ACTIVE
+  COMPLETED
   CANCELLED
 }
 
@@ -51,14 +56,14 @@ model Booking {
   id             String        @id @default(uuid())
   dressId        String
   dress          Dress         @relation(fields: [dressId], references: [id])
-  renterName     String
-  renterEmail    String
-  renterPhone    String
+  customerName   String
+  customerEmail  String
+  customerPhone  String
   startDate      DateTime
   endDate        DateTime
-  inspectionDate DateTime
-  inspectionTime String
-  status         BookingStatus @default(PENDING_INSPECTION)
+  notes          String?       @db.Text
+  type           BookingType
+  status         BookingStatus @default(PENDING)
   depositAmount  Decimal?      @db.Decimal(10, 2)
   securityVault  SecurityVault?
   createdAt      DateTime      @default(now())

@@ -38,7 +38,7 @@ router.post(
       const overlap = await prisma.booking.findFirst({
         where: {
           dressId: data.dressId,
-          status: { in: ["PENDING_INSPECTION", "INSPECTION_CONFIRMED", "RENTED"] },
+          status: { in: ["PENDING", "CONFIRMED", "ACTIVE"] },
           OR: [
             {
               startDate: { lte: new Date(data.endDate) },
@@ -57,10 +57,15 @@ router.post(
 
       const booking = await prisma.booking.create({
         data: {
-          ...data,
-          startDate: new Date(data.startDate),
-          endDate: new Date(data.endDate),
-          inspectionDate: new Date(data.inspectionDate),
+          dressId: data.dressId,
+          customerName: data.customerName,
+          customerEmail: data.customerEmail,
+          customerPhone: data.customerPhone,
+          startDate: new Date(`${data.startDate}T12:00:00.000Z`),
+          endDate: new Date(`${data.endDate}T12:00:00.000Z`),
+          notes: data.notes,
+          type: data.type,
+          status: "PENDING",
         },
         include: { dress: { select: { name: true, imageUrl: true } } },
       });
@@ -122,7 +127,7 @@ router.get(
   async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       const booking = await prisma.booking.findUnique({
-        where: { id: req.params.id },
+        where: { id: String(req.params.id) },
         include: {
           dress: true,
           securityVault: true,
@@ -155,7 +160,7 @@ router.patch(
       const { status, depositAmount } = req.body;
 
       const booking = await prisma.booking.findUnique({
-        where: { id: req.params.id },
+        where: { id: String(req.params.id) },
       });
 
       if (!booking) {
@@ -165,7 +170,7 @@ router.patch(
 
       // Update booking status
       const updated = await prisma.booking.update({
-        where: { id: req.params.id },
+        where: { id: String(req.params.id) },
         data: {
           status,
           ...(depositAmount && { depositAmount }),
@@ -173,16 +178,16 @@ router.patch(
         include: { dress: true },
       });
 
-      // If marking as RENTED, update dress status
-      if (status === "RENTED") {
+      // If marking as ACTIVE, update dress status
+      if (status === "ACTIVE") {
         await prisma.dress.update({
           where: { id: booking.dressId },
           data: { status: "RENTED" },
         });
       }
 
-      // If marking as RETURNED, free the dress
-      if (status === "RETURNED") {
+      // If marking as COMPLETED, free the dress
+      if (status === "COMPLETED") {
         await prisma.dress.update({
           where: { id: booking.dressId },
           data: { status: "AVAILABLE" },

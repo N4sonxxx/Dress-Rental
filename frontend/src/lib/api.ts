@@ -134,12 +134,12 @@ export const convertToRental = async (
   return data.booking;
 };
 
-export const createDress = async (payload: any) => {
+export const createDress = async (payload: Partial<Dress>) => {
   const { data } = await api.post<{ dress: Dress }>("/dresses", payload);
   return data.dress;
 };
 
-export const updateDress = async (id: string, payload: any) => {
+export const updateDress = async (id: string, payload: Partial<Dress>) => {
   const { data } = await api.patch<{ dress: Dress }>(`/dresses/${id}`, payload);
   return data.dress;
 };

@@ -85,11 +85,11 @@ router.get(
         prisma.dress.count(),
         prisma.dress.count({ where: { status: "AVAILABLE" } }),
         prisma.dress.count({ where: { status: "RENTED" } }),
-        prisma.booking.count({ where: { status: "PENDING_INSPECTION" } }),
-        prisma.booking.count({ where: { status: "RENTED" } }),
+        prisma.booking.count({ where: { status: "PENDING" } }),
+        prisma.booking.count({ where: { status: "ACTIVE" } }),
         prisma.booking.findMany({
           where: {
-            status: "RENTED",
+            status: "ACTIVE",
             endDate: {
               gte: new Date(),
               lte: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // next 3 days
@@ -100,7 +100,7 @@ router.get(
         }),
         prisma.booking.findMany({
           where: {
-            status: "RENTED",
+            status: "ACTIVE",
             endDate: { lt: new Date() },
           },
           include: {
@@ -221,8 +221,8 @@ router.get(
         include: {
           booking: {
             select: {
-              renterName: true,
-              renterEmail: true,
+              customerName: true,
+              customerEmail: true,
               status: true,
             },
           },
