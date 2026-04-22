@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { validate } from "../middleware/validate";
 import { authLimiter } from "../middleware/rateLimiter";
@@ -48,7 +48,7 @@ router.post(
       }
 
       const token = jwt.sign({ adminId: admin.id }, JWT_SECRET, {
-        expiresIn: JWT_EXPIRES_IN,
+        expiresIn: JWT_EXPIRES_IN as any,
       });
 
       // Set httpOnly cookie — not accessible via JavaScript (XSS protection)
