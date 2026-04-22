@@ -257,7 +257,7 @@ export default function AdminPage() {
                             </div>
                             <button
                               onClick={() =>
-                                handleStatusUpdate(b.id, "RETURNED")
+                                handleStatusUpdate(b.id, "COMPLETED")
                               }
                               className="btn-primary text-xs py-1 px-3"
                             >
@@ -300,7 +300,7 @@ export default function AdminPage() {
                               </div>
                               <button
                                 onClick={() =>
-                                  handleStatusUpdate(b.id, "RETURNED")
+                                  handleStatusUpdate(b.id, "COMPLETED")
                                 }
                                 className="btn-secondary text-xs py-1 px-3"
                               >
@@ -550,7 +550,7 @@ export default function AdminPage() {
                                   {b.status === "ACTIVE" && (
                                     <button
                                       onClick={() =>
-                                        handleStatusUpdate(b.id, "RETURNED")
+                                        handleStatusUpdate(b.id, "COMPLETED")
                                       }
                                       className="btn-secondary text-xs py-1 px-2"
                                     >
