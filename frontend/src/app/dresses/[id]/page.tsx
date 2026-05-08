@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, Heart, Clock, Tag, Ruler } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { fetchDress, fetchAvailability, type Dress } from "@/lib/api";
 import { formatPrice, statusColor } from "@/lib/utils";
+import { useAnimeScrollAnimations } from "@/lib/useAnimeScrollAnimations";
 
 export default function DressDetailPage({
   params,
@@ -27,6 +28,8 @@ export default function DressDetailPage({
   useEffect(() => {
     if (dress) loadAvailability();
   }, [dress, currentMonth]);
+
+  useAnimeScrollAnimations({ rootMargin: "0px 0px -12% 0px" });
 
   async function loadDress() {
     try {
@@ -138,6 +141,7 @@ export default function DressDetailPage({
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-violet-600 mb-8 transition-colors"
+            data-anim="fade-up"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Collection
@@ -145,7 +149,7 @@ export default function DressDetailPage({
 
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
             {/* Image */}
-            <div className="animate-fade-in-up">
+            <div data-anim="fade-up">
               <div className="relative aspect-[3/4] rounded-2xl overflow-hidden glass-card">
                 {dress.imageUrl ? (
                   <img
@@ -162,10 +166,7 @@ export default function DressDetailPage({
             </div>
 
             {/* Details */}
-            <div
-              className="animate-fade-in-up"
-              style={{ animationDelay: "0.15s" }}
-            >
+            <div data-anim="fade-up" data-delay="120">
               <span className={`badge ${statusColor(dress.status)} mb-3`}>
                 {dress.status}
               </span>
@@ -183,7 +184,7 @@ export default function DressDetailPage({
               </p>
 
               {/* Attributes */}
-              <div className="grid grid-cols-3 gap-4 mb-8">
+              <div className="grid grid-cols-3 gap-4 mb-8" data-anim="fade-up" data-delay="200">
                 <div className="glass-card p-3 text-center !hover:transform-none">
                   <Ruler className="w-4 h-4 mx-auto text-violet-500 mb-1" />
                   <p className="text-xs text-gray-500">Size</p>
@@ -204,7 +205,7 @@ export default function DressDetailPage({
               </div>
 
               {/* Availability Calendar */}
-              <div className="glass-card p-5 mb-8 !hover:transform-none">
+              <div className="glass-card p-5 mb-8 !hover:transform-none" data-anim="fade-up" data-delay="240">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-sm flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-violet-500" />
@@ -280,7 +281,7 @@ export default function DressDetailPage({
 
               {/* CTA */}
               {dress.status === "AVAILABLE" && (
-                <div className="flex gap-3">
+                <div className="flex gap-3" data-anim="fade-up" data-delay="280">
                   <Link
                     href={`/book/${dress.id}?type=INSPECTION`}
                     className="btn-primary flex-1 justify-center"

@@ -15,6 +15,7 @@ import {
 import Navbar from "@/components/Navbar";
 import { fetchDress, createBooking, type Dress } from "@/lib/api";
 import { formatPrice } from "@/lib/utils";
+import { useAnimeScrollAnimations } from "@/lib/useAnimeScrollAnimations";
 
 export default function BookingPage({
   params,
@@ -48,6 +49,8 @@ export default function BookingPage({
       .catch(() => setDress(null))
       .finally(() => setLoading(false));
   }, [dressId]);
+
+  useAnimeScrollAnimations({ rootMargin: "0px 0px -10% 0px" });
 
   function validate(): boolean {
     const errs: Record<string, string> = {};
@@ -131,7 +134,8 @@ export default function BookingPage({
         <Navbar />
         <main className="min-h-screen pt-24 max-w-lg mx-auto px-4 text-center">
           <div
-            className="glass-card p-10 animate-fade-in-up !hover:transform-none"
+            className="glass-card p-10 !hover:transform-none"
+            data-anim="fade-up"
           >
             <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-emerald-600" />
@@ -164,12 +168,13 @@ export default function BookingPage({
           <Link
             href={`/dresses/${dressId}`}
             className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-violet-600 mb-8 transition-colors"
+            data-anim="fade-up"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Dress
           </Link>
 
-          <div className="animate-fade-in-up">
+          <div data-anim="fade-up">
             <h1 className="text-2xl font-bold mb-1">
               {bookingType === "INSPECTION"
                 ? "Book an Inspection"
@@ -183,7 +188,11 @@ export default function BookingPage({
 
             {/* Dress Summary */}
             {dress && (
-              <div className="glass-card p-4 flex items-center gap-4 mb-8 !hover:transform-none">
+              <div
+                className="glass-card p-4 flex items-center gap-4 mb-8 !hover:transform-none"
+                data-anim="fade-up"
+                data-delay="120"
+              >
                 <div className="w-16 h-20 rounded-lg overflow-hidden bg-violet-100 flex-shrink-0">
                   {dress.imageUrl ? (
                     <img
@@ -215,7 +224,7 @@ export default function BookingPage({
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5" data-anim="fade-up" data-delay="180">
               {/* Name */}
               <div>
                 <label className="flex items-center gap-1.5 text-xs font-medium text-gray-600 mb-1.5">

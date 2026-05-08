@@ -4,6 +4,7 @@ import { Search, SlidersHorizontal, Sparkles, X, ArrowUpRight, Zap } from "lucid
 import Navbar from "@/components/Navbar";
 import DressCard from "@/components/DressCard";
 import { fetchDresses, type Dress } from "@/lib/api";
+import { useAnimeScrollAnimations } from "@/lib/useAnimeScrollAnimations";
 
 const SIZES = ["XS", "S", "M", "L", "XL"];
 const STYLES = ["EVENING", "COCKTAIL", "PROM", "FORMAL", "CASUAL"];
@@ -32,6 +33,8 @@ export default function HomePage() {
   useEffect(() => {
     loadDresses();
   }, [size, style, color]);
+
+  useAnimeScrollAnimations();
 
   async function loadDresses() {
     setLoading(true);
@@ -75,7 +78,10 @@ export default function HomePage() {
           <div className="absolute inset-x-0 top-8 mx-auto h-[520px] w-[92%] max-w-6xl rounded-[34px] scanline-bg opacity-25" />
 
           <div className="relative mx-auto w-[92%] max-w-6xl px-6 sm:px-10 py-12 sm:py-16 text-white">
-            <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.2em] mono text-white/70 animate-fade-in-up">
+            <div
+              className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.2em] mono text-white/70"
+              data-anim="fade-up"
+            >
               <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-white/10 border border-white/20">
                 <Sparkles className="w-3 h-3 text-lime-300" />
                 Curated Collection
@@ -85,7 +91,7 @@ export default function HomePage() {
             </div>
 
             <div className="mt-7 grid grid-cols-1 lg:grid-cols-[1fr_290px] gap-8 items-start">
-              <div className="animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+              <div data-anim="fade-up" data-delay="80">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl leading-[1.05] font-semibold max-w-3xl">
                   Dress rental, but
                   <span className="block text-lime-300 mono tracking-tight">
@@ -118,8 +124,9 @@ export default function HomePage() {
               </div>
 
               <aside
-                className="rounded-2xl border border-white/20 bg-white/5 p-5 backdrop-blur-md animate-fade-in-up"
-                style={{ animationDelay: "0.2s" }}
+                className="rounded-2xl border border-white/20 bg-white/5 p-5 backdrop-blur-md"
+                data-anim="fade-up"
+                data-delay="160"
               >
                 <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] mono text-white/70 mb-4">
                   <Zap className="w-3.5 h-3.5 text-lime-300" />
@@ -147,7 +154,7 @@ export default function HomePage() {
         </section>
 
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8" data-anim="fade-up">
             <div>
               <p className="mono text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-2">Collection</p>
               <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900">Browse The Grid</h2>
@@ -171,7 +178,7 @@ export default function HomePage() {
           </div>
 
           {showFilters && (
-            <div className="glass-card p-6 mb-8 animate-fade-in-up">
+            <div className="glass-card p-6 mb-8" data-anim="fade-up" data-delay="120">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-sm mono uppercase tracking-[0.14em]">Filter Dresses</h3>
                 {activeFilters > 0 && (
@@ -267,8 +274,8 @@ export default function HomePage() {
               {filteredDresses.map((dress, i) => (
                 <div
                   key={dress.id}
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${i * 0.05}s` }}
+                  data-anim="fade-up"
+                  data-delay={`${i * 60}`}
                 >
                   <DressCard dress={dress} />
                 </div>
